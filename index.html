@@ -3,6 +3,7 @@
     <head>
         <title>Texas Game</title>
         <link href="https://fonts.googleapis.com/css?family=Raleway:300&display=swap" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/tinycolor2"></script>
     </head>
     <body>
         <div id="container">
@@ -39,13 +40,16 @@
                 x: cWidth/2,
                 y: cHeight/2,
                 size: 40,
-                color: '#dddddd',
+                color: '#db4848',
                 draw: function(){
                     ctx.clearRect(0,0,2000,2000);
                     ctx.beginPath();
                     ctx.arc(circle.x,circle.y,circle.size,0,2*Math.PI,false);
-                    ctx.fillStyle = '#db4848'
+                    ctx.fillStyle = circle.color
                     ctx.fill();
+                    ctx.strokeStyle = "black"
+                    ctx.lineWidth = 1
+                    ctx.stroke();
                 }
             };
             
@@ -71,6 +75,7 @@
             function updateCircle(){
                 circle.x = Math.round(Math.random()*(cWidth-(2*circle.size)))+circle.size;
                 circle.y = Math.round(Math.random()*(cHeight-(2*circle.size)))+circle.size;
+                circle.color = tinycolor.random().toString();
                 circle.draw();
             }
             
