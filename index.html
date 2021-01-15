@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Texas Game</title>
+        <link href="https://fonts.googleapis.com/css?family=Raleway:300&display=swap" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/tinycolor2"></script>
+    </head>
+    <body>
+        <div id="container">
+            <p id="point-display">Points: 0</p>
+            <button id='resetButton'>Reset</button>
+            <br/><br/><br/>
+            <canvas id="canvas">
+            </canvas>
+        </div>
+        <script>
+            
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+            
+            
+            var pointDisplay = document.getElementById('point-display');
+            var resetButton = document.getElementById('resetButton');
+            
+            var cWidth = 1280;
+            var cHeight = 567;
+            
+            canvas.style.width = cWidth + 'px';
+            canvas.style.height = cHeight + 'px';
+            
+            var scale = window.devicePixelRatio;
+            
+            canvas.width = cWidth * scale;
+            canvas.height = cHeight * scale;
+            
+            var difX = 75;
+            var difY = 120;
+            
+            var circle = {
+                x: cWidth/2,
+                y: cHeight/2,
+                size: 40,
+                color: '#db4848',
+                draw: function(){
+                    ctx.clearRect(0,0,2000,2000);
+                    ctx.beginPath();
+                    ctx.arc(circle.x,circle.y,circle.size,0,2*Math.PI,false);
+                    ctx.fillStyle = circle.color
+                    ctx.fill();
+                    ctx.strokeStyle = "black"
+                    ctx.lineWidth = 1
+                    ctx.stroke();
+                }
+            };
+            
+            var points = 0;
+            
+            var mouseX;
+            var mouseY;
+            
+            var updateMousePos = function(event){
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            }
+            
+            canvas.addEventListener('click',function(){
+                updateMousePos(event);
+                update();
+            });
+            
+            function updatePoints(){
+                pointDisplay.innerHTML = 'Points: ' + points;
+            }
+            
+            function updateCircle(){
+                circle.x = Math.round(Math.random()*(cWidth-(2*circle.size)))+circle.size;
+                circle.y = Math.round(Math.random()*(cHeight-(2*circle.size)))+circle.size;
+                circle.color = tinycolor.random().toString();
+                circle.draw();
+            }
+            
+            circle.draw();
+            
+            function distance(x1,y1,x2,y2){
+                return Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+            }
+            function update(){
+                if(distance(mouseX-45,mouseY-75,circle.x,circle.y) <= circle.size){
+                    points++;
+                    updatePoints();
+                    updateCircle();
+                }
+                
+            }
+            function reset(){
+                points = 0;
+                circle.x = cWidth/2;
+                circle.y = cHeight/2;
+                updatePoints();
+                circle.draw();
+            }
+            
+            resetButton.addEventListener('click',function(){reset();});
+            
+        </script>
+        <style>
+            html{
+                font-family: 'Raleway', sans-serif;
+            }
+            button{
+                font-family: 'Raleway', sans-serif;
+            }
+            body{
+                overflow: hidden;
+            }
+            #container{
+                width: 99%;
+                height: 100%;
+                position: absolute;
+                text-align: center;
+                line-height: 3px;
+            }
+            #canvas{
+                margin: auto;
+                border-style: solid;
+                border-width: 3px;
+            }
+            
+        </style>
+    </body>
+</html>
